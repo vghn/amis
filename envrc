@@ -16,7 +16,7 @@ export APPDIR TMPDIR NOW VERSION
 
 # Decrypt .env
 # shellcheck disable=1090
-. <( gpg --batch --yes --pinentry-mode loopback --passphrase "$( echo "$ENCRYPT_KEY" | base64 --decode --ignore-garbage )" --decrypt .env.gpg ) 2>/dev/null || true
+. <( ( echo "$ENCRYPT_KEY" | base64 --decode ) |  gpg --batch --yes --decrypt --passphrase-fd 0 .env.gpg ) 2>/dev/null || true
 
 # Detect environment
 GIT_BRANCH="${TRAVIS_BRANCH:-$(git symbolic-ref --short HEAD)}"
