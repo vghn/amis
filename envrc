@@ -14,10 +14,6 @@ NOW="$(date +"%Y%m%d_%H%M%S")"
 VERSION=$(git --git-dir="${APPDIR}/.git" --work-tree="${APPDIR}" describe --always --tags)
 export APPDIR TMPDIR NOW VERSION
 
-# Decrypt .env
-# shellcheck disable=1090
-. <( ( echo "$ENCRYPT_KEY" | base64 --decode ) |  gpg --batch --yes --decrypt --passphrase-fd 0 .env.gpg ) 2>/dev/null || true
-
 # Detect environment
 GIT_BRANCH="${TRAVIS_BRANCH:-$(git symbolic-ref --short HEAD)}"
 if [[ -n "${ENVTYPE:-}" ]]; then

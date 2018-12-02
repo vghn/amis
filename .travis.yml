@@ -50,11 +50,11 @@ before_script:
 
 script:
   - find ./bin ./shlib -type f -exec shellcheck {} +
-  - ./bin/stack ami validate "${AMI}"
+  - ./bin/ami validate "${AMI}"
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
-      ./bin/stack ami build "${AMI}"
-      ./bin/stack ami clean "${AMI}"
+      ./bin/ami build "${AMI}"
+      ./bin/ami clean "${AMI}"
     fi
 
 notifications:
