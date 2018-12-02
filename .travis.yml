@@ -31,7 +31,7 @@ install:
 before_script:
   - |
     . envrc
-    echo "${TRAVIS_ORION_ROLE_ARN}"
+    cat /home/travis/.travis/job_stages
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
       aws configure --profile ursa set region us-east-1
       aws configure --profile ursa set aws_access_key_id "${TRAVIS_AWS_ACCESS_KEY_ID}"
