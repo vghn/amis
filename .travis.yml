@@ -30,7 +30,7 @@ install:
     packer version
 before_script:
   - |
-    . envrc
+    . envrc || true
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
       aws configure --profile ursa set region us-east-1
       aws configure --profile ursa set aws_access_key_id "${TRAVIS_AWS_ACCESS_KEY_ID}"
@@ -45,9 +45,7 @@ before_script:
           aws configure --profile mec7 set source_profile ursa
           ;;
       esac
-      echo test
     fi
-    echo test
   - git clone https://github.com/vghn/ansible ../ansible
 
 script:
