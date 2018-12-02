@@ -49,10 +49,10 @@
       "type": "shell"
     },{
       "type": "ansible",
-      "host_alias": "unifi",
+      "host_alias": "prometheus",
       "playbook_file": "../ansible/site.yml",
       "inventory_file": "../ansible/production",
-      "extra_arguments": [ "--limit", "unifi" ],
+      "extra_arguments": [ "--limit", "prometheus" ],
       "ansible_env_vars": [
         "ANSIBLE_ROLES_PATH=~/.ansible/roles:../ansible/roles"
       ]

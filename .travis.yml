@@ -55,8 +55,7 @@ script:
   - ./bin/ami validate "${AMI}"
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
-      ./bin/ami build "${AMI}"
-      ./bin/ami clean "${AMI}"
+      ./bin/ami build "${AMI}" && ./bin/ami clean "${AMI}"
     fi
 
 notifications:
