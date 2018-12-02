@@ -31,11 +31,12 @@ install:
 before_script:
   - |
     . envrc
-    cat /home/travis/.travis/job_stages
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
       aws configure --profile ursa set region us-east-1
+      cat ~/.aws/config
       aws configure --profile ursa set aws_access_key_id "${TRAVIS_AWS_ACCESS_KEY_ID}"
       aws configure --profile ursa set aws_secret_access_key "${TRAVIS_AWS_SECRET_ACCESS_KEY}"
+      cat ~/.aws/config
       case "$AMI" in
         prometheus )
           aws configure --profile orion set role_arn "${TRAVIS_ORION_ROLE_ARN}"
@@ -46,6 +47,7 @@ before_script:
           aws configure --profile mec7 set source_profile ursa
           ;;
       esac
+      cat ~/.aws/config
     fi
   - git clone https://github.com/vghn/ansible ../ansible
 
