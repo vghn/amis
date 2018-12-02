@@ -1,0 +1,61 @@
+dist: xenial
+language: ruby
+branches:
+  except:
+    - "/^v\\d/"
+env:
+  global:
+    - PACKER_VERSION=1.3.2
+    - SC_VERSION=stable # or "v0.4.7", or "latest"
+  matrix:
+    - AMI=prometheus
+    - AMI=unifi
+install:
+  # Install a custom version of shellcheck instead of Travis CI's default
+  - |
+    wget "https://storage.googleapis.com/shellcheck/shellcheck-${SC_VERSION}.linux.x86_64.tar.xz"
+    tar --xz -xvf "shellcheck-${SC_VERSION}.linux.x86_64.tar.xz"
+    shellcheck() { "shellcheck-${SC_VERSION}/shellcheck" "$@"; }
+    shellcheck --version
+  # Install PIP packages
+  - pip install --user --upgrade ansible awscli aws-amicleaner future
+    ansible --version
+    aws --version
+    amicleaner --version
+  # Install Hashicorp's Packer
+  - |
+    curl -L -o packer.zip "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
+    unzip -d ~/bin packer.zip
+    packer version
+before_script: |
+  . envrc
+  if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
+    aws configure --profile ursa set region us-east-1
+    aws configure --profile ursa set aws_access_key_id "${TRAVIS_AWS_ACCESS_KEY_ID}"
+    aws configure --profile ursa set aws_secret_access_key "${TRAVIS_AWS_SECRET_ACCESS_KEY}"
+    case "$AMI" in
+      prometheus )
+        aws configure --profile orion set role_arn "${TRAVIS_ORION_ROLE_ARN}"
+        aws configure --profile orion set source_profile ursa
+        ;;
+      unifi )
+        aws configure --profile mec7 set role_arn "${TRAVIS_MEC7_ROLE_ARN}"
+        aws configure --profile mec7 set source_profile ursa
+        ;;
+    esac
+  fi
+  git clone https://github.com/vghn/ansible ../ansible
+
+script: |
+  find ./bin ./shlib -type f -exec shellcheck {} +
+  ./bin/stack ami validate "${AMI}"
+  if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
+    ./bin/stack ami build "${AMI}"
+    ./bin/stack ami clean "${AMI}"
+  fi
+
+notifications:
+  webhooks:
+    urls: https://vbot.ghn.me/travis
+  slack:
+    secure: fM1+n5KxxRyCESxg297OusbWMUaxnJWB73dF3u7wy3WvOAEoIBMz5RmqNC+kjNip5GyEAMoMXQmkFRIembU3uQngo9ZGm5+dPvRpEasu6aAG6zLcbPoQnIJvzLftzq++6s5kpp+ZoXuvRKabr9yyrYWr00jXZBt7UGfb3k+W8h1b2giBQxiAoscA2ohq6bhnb2eJVLPnOqI7LzaD+KEv8Fk5Mfw4d6Qpq75waXbTjZLPi/OQ+UGIMV7OAtSMYCmnoqlo+Jh0MQaKF/VPnX53gf3ZESAfi0ejbIz3h7w29JjpKtE4Jxafa2/FtC2bkbYLDd+ROZWO5H1qWjsxnmMRW7AcKxzTKX9BPAhdMJYdX0RQ33x7mfjv2v6G97jocfRYGJbNa9E8cw7XuvZgcL3rr5mKfl7m0WKHjAO5DkXlfnKaaCyncgY+I9vctPwYShfGt484ypzGFpshNqV7b57HE7ymaF/xQ/v6diQ94T6V09MLFJWymBB3J58CpyWkVFY8MCAvHv5hIk67HATx8ZSIabigVP/+hQdteamZdnUzmqOUgxinNhXCFKb0hZP021gr7cNSDJ5wcOsfZblbFZvfVf6Lh53RHx8jMUVa82MXXHt2g0hQdXyLBH5YHonTFcLwmpN6vqJ9l0YDcsfMCDEPt4EOaXJTcPiBFPOu89KdpWk=
