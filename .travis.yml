@@ -37,9 +37,9 @@ before_script:
       aws configure --profile ursa set aws_secret_access_key "${TRAVIS_AWS_SECRET_ACCESS_KEY}"
       case "$AMI" in
         prometheus )
-          echo "${TRAVIS_AWS_ORION_ROLE_ARN}"
           aws configure --profile orion set role_arn "${TRAVIS_AWS_ORION_ROLE_ARN}"
           aws configure --profile orion set source_profile ursa
+          cat ~/.aws/config
           ;;
         unifi )
           aws configure --profile mec7 set role_arn "${TRAVIS_AWS_MEC7_ROLE_ARN}"
