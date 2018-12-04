@@ -46,9 +46,8 @@ before_script:
           ;;
       esac
     fi
-  - |
-    git clone https://github.com/vghn/ansible ../ansible
-    ansible-galaxy install -r ../ansible/roles/requirements.yml
+  - git clone https://github.com/vghn/ansible ../ansible
+  - ansible-galaxy install --roles-path ../ansible/galaxy --role-file ../ansible/roles/requirements.yml
 
 script:
   - find ./bin ./shlib -type f -exec shellcheck {} +

@@ -57,7 +57,9 @@
       ],
       "playbook_file": "../ansible/site.yml",
       "ansible_env_vars": [
-        "ANSIBLE_ROLES_PATH=~/.ansible/roles:../ansible/roles"
+        "ANSIBLE_SSH_ARGS='-o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o AddKeysToAgent=no'",
+        "ANSIBLE_ROLES_PATH=../ansible/roles:../ansible/roles/galaxy",
+        "ANSIBLE_REMOTE_TMP=/tmp/${USER}/ansible"
       ]
     }
   ]
