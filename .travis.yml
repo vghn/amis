@@ -32,17 +32,19 @@ before_script:
   - |
     . <( ( echo "$ENCRYPT_KEY" | base64 --decode ) |  gpg --batch --yes --decrypt --passphrase-fd 0 .env.gpg ) 2>/dev/null || true
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
-      aws configure --profile ursa set region us-east-1
       aws configure --profile ursa set aws_access_key_id "${TRAVIS_AWS_ACCESS_KEY_ID}"
       aws configure --profile ursa set aws_secret_access_key "${TRAVIS_AWS_SECRET_ACCESS_KEY}"
+      aws configure --profile ursa set region us-east-1
       case "$AMI" in
         prometheus )
           aws configure --profile orion set role_arn "${TRAVIS_AWS_ORION_ROLE_ARN}"
           aws configure --profile orion set source_profile ursa
+          aws configure --profile orion set region us-east-1
           ;;
         unifi )
           aws configure --profile mec7 set role_arn "${TRAVIS_AWS_MEC7_ROLE_ARN}"
           aws configure --profile mec7 set source_profile ursa
+          aws configure --profile mec7 set region us-west-2
           ;;
       esac
     fi
@@ -61,4 +63,4 @@ notifications:
   webhooks:
     urls: https://vbot.ghn.me/travis
   slack:
-    secure: fM1+n5KxxRyCESxg297OusbWMUaxnJWB73dF3u7wy3WvOAEoIBMz5RmqNC+kjNip5GyEAMoMXQmkFRIembU3uQngo9ZGm5+dPvRpEasu6aAG6zLcbPoQnIJvzLftzq++6s5kpp+ZoXuvRKabr9yyrYWr00jXZBt7UGfb3k+W8h1b2giBQxiAoscA2ohq6bhnb2eJVLPnOqI7LzaD+KEv8Fk5Mfw4d6Qpq75waXbTjZLPi/OQ+UGIMV7OAtSMYCmnoqlo+Jh0MQaKF/VPnX53gf3ZESAfi0ejbIz3h7w29JjpKtE4Jxafa2/FtC2bkbYLDd+ROZWO5H1qWjsxnmMRW7AcKxzTKX9BPAhdMJYdX0RQ33x7mfjv2v6G97jocfRYGJbNa9E8cw7XuvZgcL3rr5mKfl7m0WKHjAO5DkXlfnKaaCyncgY+I9vctPwYShfGt484ypzGFpshNqV7b57HE7ymaF/xQ/v6diQ94T6V09MLFJWymBB3J58CpyWkVFY8MCAvHv5hIk67HATx8ZSIabigVP/+hQdteamZdnUzmqOUgxinNhXCFKb0hZP021gr7cNSDJ5wcOsfZblbFZvfVf6Lh53RHx8jMUVa82MXXHt2g0hQdXyLBH5YHonTFcLwmpN6vqJ9l0YDcsfMCDEPt4EOaXJTcPiBFPOu89KdpWk=
+    secure: I5d4t/2F8KHgP2Z0ajUz6CIS6TZdMUkFYUa5wH3uxyXiPlJpKZh0E5jsh7Tdz356RDOs5r/lGCzetqmlhH7EwmtiV1tks+btZ+hmR+xYFgmhMwnXivzWn1MwBtpt1q9pqCgheMODmcA8vG3yGeLooStLQ3++gjAGVWV2v9jahz5zoKrkYw+4haS+EzpsPddtMQx8/AiiMuB3MGOHZKvCmRjQW72MFqN2SYKT9U3MzBgdJS8Mxa7axITmyu1Pxvgt9kYJQilHbBUqNJUL1W9lBugFtVDMECHUC7DO5blFwbzUhglUDn9hhOy8VisHqrFuiNydFcgnqHoQJ+Fj3wKIukzPMpru1ZmcBC/wmNXwaAKIRlqzNYy9tfJOk/sjUkJ34BjNtf+8OAoRgRxfYycoZ0eXLidfZ/43PBuW5jP1pQK1Gk7yFLGyM2yOXTqflIGa2I71i87cxqE38laOspP3+SAtl0bIP3d8uDr/FBWb8hHTB9PyA0pmDTjy/vzcnH8KqMDs/OIAwoCs3rNnb/I0nhONBWU7sLMmJjqMr/AhA39AMxOXFd/9xZyVP2iHu0RueLFrOH6ZBrFUgUEGyn4uqPc2Z0wsO6wox4puM8YHH7YP/Z/GnfM/zMiX5rg4UOarUX3zWrUNPSSP0Z+gREgIvbBV/IYiqhqscq49eB1+mk0=
