@@ -21,6 +21,7 @@
         "most_recent": true
       },
       "instance_type": "t2.micro",
+      "region": "us-west-2",
       "ssh_username": "ubuntu",
       "run_tags": {
         "Name": "Unifi AMI",
