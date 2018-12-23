@@ -1,22 +1,12 @@
 dist: xenial
 language: ruby
-branches:
-  except:
-    - "/^v\\d/"
 env:
   global:
-    - PACKER_VERSION=1.3.3
-    - SC_VERSION=stable # or "v0.4.7", or "latest"
+    PACKER_VERSION: '1.3.3'
   matrix:
     - AMI=prometheus
     - AMI=unifi
 install:
-  # Install a custom version of shellcheck instead of Travis CI's default
-  - |
-    wget "https://storage.googleapis.com/shellcheck/shellcheck-${SC_VERSION}.linux.x86_64.tar.xz"
-    tar --xz -xvf "shellcheck-${SC_VERSION}.linux.x86_64.tar.xz"
-    shellcheck() { "shellcheck-${SC_VERSION}/shellcheck" "$@"; }
-    shellcheck --version
   # Install PIP packages
   - |
     pip install --user --upgrade ansible awscli aws-amicleaner future
@@ -51,11 +41,10 @@ before_script:
   - ansible-galaxy install --roles-path ../ansible/roles/galaxy --role-file ../ansible/roles/requirements.yml
 
 script:
-  - find ./bin ./shlib -type f -exec shellcheck {} +
-  - ./bin/ami validate "${AMI}"
+  - ./ami validate "${AMI}"
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
-      ./bin/ami build "${AMI}" && ./bin/ami clean "${AMI}"
+      ./ami build "${AMI}" && ./ami clean "${AMI}"
     fi
 
 notifications:
