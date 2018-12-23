@@ -42,10 +42,8 @@ before_script:
 
 script:
   - ./ami validate "${AMI}"
-  - |
-    if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
-      ./ami build "${AMI}" && ./ami clean "${AMI}"
-    fi
+  - if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then ./ami build "${AMI}"; fi
+  - if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then ./ami clean "${AMI}"; fi
 
 notifications:
   webhooks:
