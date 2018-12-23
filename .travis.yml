@@ -37,12 +37,12 @@ before_script:
       case "$AMI" in
         prometheus )
           aws configure --profile orion set role_arn "${TRAVIS_AWS_ORION_ROLE_ARN}"
-          aws configure --profile orion set source_profile ursa
+          aws configure --profile orion set source_profile default
           aws configure --profile orion set region us-east-1
           ;;
         unifi )
           aws configure --profile mec7 set role_arn "${TRAVIS_AWS_MEC7_ROLE_ARN}"
-          aws configure --profile mec7 set source_profile ursa
+          aws configure --profile mec7 set source_profile default
           aws configure --profile mec7 set region us-west-2
           ;;
       esac
