@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # AMI Scripts
 
+# Usage
 usage(){
   echo '---------------------------------------------'
   echo "USAGE: ${BASH_SOURCE[0]} [COMMAND] [OPTIONS]"
@@ -57,8 +58,8 @@ process_cli(){
   if [[ -z $1 ]]; then usage; fi
 
   local cmd ami var
-  cmd="${1:-}"
-  ami="${2:-}"
+  cmd="${1:-}"; shift || true
+  ami="${1:-}"; shift || true
   var="-var 'version=${VERSION}' -var 'ansible_repo=https://github.com/vghn/ansible'"
 
   case "$ami" in
