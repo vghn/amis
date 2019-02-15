@@ -22,14 +22,13 @@ before_script:
       mkdir ~/.aws
       gpg --decrypt --passphrase "$(echo "$ENCRYPT_KEY" | base64 --decode)" --batch --yes --output ~/.aws/credentials .aws.gpg
       chmod 400 ~/.aws/credentials
-    fi
-  - git clone https://github.com/vghn/ansible ../ansible
-  - cd ../ansible && ansible-galaxy install --role-file requirements.yml
-  - |
-    if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
+      git clone https://github.com/vghn/ansible ../ansible
+      (
       cd ../ansible
+      ansible-galaxy install --role-file requirements.yml
       gpg --decrypt --passphrase "$(echo "$ENCRYPT_KEY" | base64 --decode)" --batch --yes encrypted.tgz.gpg | tar xz
       chmod 400 ansible_rsa ansible_vault_pwd
+      )
     fi
 
 script:
