@@ -8,7 +8,7 @@ env:
 install:
   # Install PIP packages
   - |
-    pip install --user --upgrade  pip pycrypto ansible aws-amicleaner future
+    pip install --user --upgrade pip pycrypto ansible aws-amicleaner future
     ansible --version
     amicleaner --version
   # Install Hashicorp's Packer
@@ -16,13 +16,14 @@ install:
     curl -L -o packer.zip "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
     unzip -d ~/bin packer.zip
     packer version
+  # Add Ansible repository
+  - git clone https://github.com/vghn/ansible ../ansible
 before_script:
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
       mkdir ~/.aws
       gpg --decrypt --passphrase "$(echo "$ENCRYPT_KEY" | base64 --decode)" --batch --yes --output ~/.aws/credentials .aws.gpg
       chmod 400 ~/.aws/credentials
-      git clone https://github.com/vghn/ansible ../ansible
       (
       cd ../ansible
       ansible-galaxy install --role-file requirements.yml
