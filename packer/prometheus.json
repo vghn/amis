@@ -1,14 +1,11 @@
 {
-  "variables": {
-    "version": "",
-    "ansible_repo": ""
-  },
   "builders": [
     {
       "name": "Prometheus",
       "type": "amazon-ebs",
-      "ami_name": "Prometheus_{{user `version`}}_{{timestamp}}",
-      "ami_description": "Prometheus Image ({{user `version`}})",
+      "profile": "orion",
+      "ami_name": "Prometheus_{{timestamp}}",
+      "ami_description": "Prometheus AMI",
       "source_ami_filter": {
         "filters": {
           "architecture": "x86_64",
@@ -20,7 +17,7 @@
         "owners": ["099720109477"],
         "most_recent": true
       },
-      "instance_type": "t2.micro",
+      "instance_type": "t1.micro",
       "region": "us-east-1",
       "ssh_username": "ubuntu",
       "run_tags": {
@@ -51,17 +48,8 @@
     },{
       "type": "ansible",
       "host_alias": "prometheus",
-      "groups": [
-        "vgh",
-        "aws",
-        "docker"
-      ],
-      "playbook_file": "../ansible/site.yml",
-      "ansible_env_vars": [
-        "ANSIBLE_SSH_ARGS='-o IdentitiesOnly=yes -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o AddKeysToAgent=no'",
-        "ANSIBLE_ROLES_PATH=../ansible/roles:../ansible/roles/galaxy",
-        "ANSIBLE_REMOTE_TMP=/tmp/${USER}/ansible"
-      ]
+      "ansible_env_vars": ["ANSIBLE_CONFIG=../ansible/ansible.cfg"],
+      "playbook_file": "../ansible/site.yml"
     }
   ]
 }
