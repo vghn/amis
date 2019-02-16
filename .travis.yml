@@ -26,19 +26,17 @@ before_script:
       chmod 400 ~/.aws/credentials
       (
       cd ../ansible
-      ansible-galaxy install --role-file requirements.yml
       gpg --decrypt --passphrase "$(echo "$ENCRYPT_KEY" | base64 --decode)" --batch --yes encrypted.tgz.gpg | tar xz
       chmod 400 ansible_rsa ansible_vault_pwd
+      ansible-galaxy install --role-file requirements.yml
       )
     fi
-
 script:
   - packer validate "packer/${AMI}.json"
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
       packer build "packer/${AMI}.json"
     fi
-
 notifications:
   webhooks:
     urls: https://vbot.ghn.me/travis
