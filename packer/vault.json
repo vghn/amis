@@ -1,0 +1,67 @@
+{
+  "variables": {
+    "vault_version": "1.0.3"
+  },
+  "builders": [
+    {
+      "name": "Vault",
+      "type": "amazon-ebs",
+      "profile": "hydra",
+      "ami_name": "Vault_{{timestamp}}",
+      "ami_description": "Vault AMI",
+      "source_ami_filter": {
+        "filters": {
+          "architecture": "x86_64",
+          "root-device-type": "ebs",
+          "virtualization-type": "hvm",
+          "block-device-mapping.volume-type": "gp2",
+          "name": "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"
+        },
+        "owners": ["099720109477"],
+        "most_recent": true
+      },
+      "instance_type": "c5.large",
+      "spot_price": "auto",
+      "spot_price_auto_product": "Linux/UNIX (Amazon VPC)",
+      "region": "us-east-1",
+      "ssh_username": "ubuntu",
+      "run_tags": {
+        "Name": "Vault AMI",
+        "Group": "vgh",
+        "Project": "vgh",
+        "Packer": "true"
+      },
+      "tags": {
+        "Name": "Vault AMI",
+        "Group": "vgh",
+        "Project": "vgh",
+        "Packer": "true"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 5; done"
+    },{
+      "type": "shell",
+      "execute_command": "{{ .Vars }} sudo -E bash -e '{{ .Path }}'",
+      "inline": [
+        "export DEBIAN_FRONTEND=noninteractive",
+        "apt-get update && apt-get -qy -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade && apt-get -y autoremove --purge"
+      ]
+    },{
+      "type": "shell",
+      "inline": [
+        "git clone https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",
+        "/tmp/terraform-aws-vault/modules/install-vault/install-vault --version {{user `vault_version`}}"
+      ]
+    },{
+      "type": "shell",
+      "inline": [
+        "git clone https://github.com/Neilpang/acme.sh.git /tmp/acme.sh",
+        "cd /tmp/acme.sh && sudo su -c './acme.sh --install'"
+      ]
+    }
+  ]
+}
