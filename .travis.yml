@@ -5,6 +5,7 @@ env:
     PACKER_VERSION: '1.3.5'
   matrix:
     - AMI=prometheus
+    - AMI=vault
 install:
   # Install PIP packages
   - |
