@@ -17,7 +17,7 @@
         "owners": ["099720109477"],
         "most_recent": true
       },
-      "instance_type": "t1.micro",
+      "instance_type": "c5.large",
       "region": "us-east-1",
       "ssh_username": "ubuntu",
       "run_tags": {
@@ -39,12 +39,12 @@
       "type": "shell",
       "inline": "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 5; done"
     },{
+      "type": "shell",
       "execute_command": "{{ .Vars }} sudo -E bash -e '{{ .Path }}'",
       "inline": [
         "export DEBIAN_FRONTEND=noninteractive",
         "apt-get update && apt-get -qy -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade && apt-get -y autoremove --purge"
-      ],
-      "type": "shell"
+      ]
     },{
       "type": "ansible",
       "host_alias": "prometheus",
