@@ -4,8 +4,8 @@ env:
   global:
     PACKER_VERSION: '1.3.5'
   matrix:
-    - AMI=prometheus
-    - AMI=vault
+    - AMI=prometheus AWS_PROFILE=orion
+    - AMI=vault AWS_PROFILE=hydra
 install:
   # Install PIP packages
   - |
@@ -37,6 +37,7 @@ script:
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
       packer build "packer/${AMI}.json"
+      amicleaner --mapping-key name --mapping-values "$AMI" --force-delete --full-report --keep-previous 1 --check-orphans
     fi
 notifications:
   webhooks:
