@@ -37,7 +37,7 @@ script:
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
       packer build "packer/${AMI}.json"
-      amicleaner --mapping-key name --mapping-values "$AMI" --force-delete --full-report --keep-previous 1 --check-orphans
+      amicleaner --mapping-key name --mapping-values "${AMI^}" --force-delete --full-report --keep-previous 1 --check-orphans
     fi
 notifications:
   webhooks:
