@@ -3,7 +3,7 @@
     {
       "name": "Prometheus",
       "type": "amazon-ebs",
-      "profile": "orion",
+      "profile": "lyra",
       "ami_name": "Prometheus_{{timestamp}}",
       "ami_description": "Prometheus AMI",
       "source_ami_filter": {
