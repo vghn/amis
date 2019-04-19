@@ -4,7 +4,7 @@ env:
   global:
     PACKER_VERSION: '1.4.0'
   matrix:
-    - AMI=prometheus AWS_PROFILE=orion
+    - AMI=prometheus AWS_PROFILE=lyra
     - AMI=vault AWS_PROFILE=hydra
 install:
   # Install PIP packages
