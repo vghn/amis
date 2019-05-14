@@ -1,5 +1,17 @@
 # Change Log
 
+## [v0.0.3](https://github.com/vghn/amis/tree/v0.0.3) (2019-05-14)
+[Full Changelog](https://github.com/vghn/amis/compare/v0.0.2...v0.0.3)
+
+**Implemented enhancements:**
+
+- Move Prometheus to another account [\#4](https://github.com/vghn/amis/issues/4)
+- Prune old AMIs in TravisCI builds [\#3](https://github.com/vghn/amis/issues/3)
+- Add Vault AMI [\#2](https://github.com/vghn/amis/issues/2)
+
+## [v0.0.2](https://github.com/vghn/amis/tree/v0.0.2) (2019-02-15)
+[Full Changelog](https://github.com/vghn/amis/compare/v0.0.1...v0.0.2)
+
 ## [v0.0.1](https://github.com/vghn/amis/tree/v0.0.1) (2019-02-15)
 [Full Changelog](https://github.com/vghn/amis/compare/v0.0.0...v0.0.1)
 
