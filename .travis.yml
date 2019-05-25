@@ -2,7 +2,7 @@ dist: xenial
 language: ruby
 env:
   global:
-    PACKER_VERSION: '1.4.0'
+    PACKER_VERSION: '1.4.1'
   matrix:
     - AMI=prometheus AWS_PROFILE=lyra
     - AMI=vault AWS_PROFILE=hydra
