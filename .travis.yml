@@ -24,10 +24,9 @@ before_script:
       export VAULT_TOKEN=$(curl --request POST --data "{\"role_id\":\"${VAULT_ROLE_ID}\",\"secret_id\":\"${VAULT_SECRET_ID}\"}" "${VAULT_ADDR}/v1/auth/approle/login" | jq -r .auth.client_token)
       mkdir -p ~/.aws
       curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/ci/data/amis" | jq -r .data.data.aws_credentials > ~/.aws/credentials
-      chmod 400 ~/.aws/credentials
       curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/ci/data/ansible" | jq -r .data.data.rsa > ../ansible/ansible_rsa
       curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/ci/data/ansible" | jq -r .data.data.vault_pwd > ../ansible/ansible_vault_pwd
-      chmod 400 ../ansible/ansible_rsa ../ansible/ansible_vault_pwd
+      chmod 400 ~/.aws/credentials ../ansible/ansible_rsa ../ansible/ansible_vault_pwd
     fi
 script:
   - packer validate "packer/${AMI}.json"
