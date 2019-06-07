@@ -25,12 +25,9 @@ before_script:
       mkdir -p ~/.aws
       curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/ci/data/amis" | jq -r .data.data.aws_credentials > ~/.aws/credentials
       chmod 400 ~/.aws/credentials
-      (
-      cd ../ansible
-      curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/ci/data/ansible" | jq -r .data.data.rsa > ansible_rsa
-      curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/ci/data/ansible" | jq -r .data.data.vault_pwd > ansible_vault_pwd
-      chmod 400 ansible_rsa ansible_vault_pwd
-      )
+      curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/ci/data/ansible" | jq -r .data.data.rsa > ../ansible/ansible_rsa
+      curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/ci/data/ansible" | jq -r .data.data.vault_pwd > ../ansible/ansible_vault_pwd
+      chmod 400 ../ansible/ansible_rsa ../ansible/ansible_vault_pwd
     fi
 script:
   - packer validate "packer/${AMI}.json"
