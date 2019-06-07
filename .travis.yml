@@ -22,7 +22,7 @@ install:
 before_script:
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
-      export VAULT_ROLE_ID=$(curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/auth/approle/role/${VAULT_ROLE}/role-id" | jq -r .data.secret_id)
+      export VAULT_ROLE_ID=$(curl --header "X-Vault-Token:${VAULT_TOKEN}" "${VAULT_ADDR}/v1/auth/approle/role/${VAULT_ROLE}/role-id" | jq -r .data.role_id)
       export VAULT_SECRET_ID=$(curl --header "X-Vault-Token:${VAULT_TOKEN}" --request POST "${VAULT_ADDR}/v1/auth/approle/role/${VAULT_ROLE}/secret-id" | jq -r .data.secret_id)
       export VAULT_TOKEN=$(curl --request POST --data "{\"role_id\":\"${VAULT_ROLE_ID}\",\"secret_id\":\"${VAULT_SECRET_ID}\"}" "${VAULT_ADDR}/v1/auth/approle/login" | jq -r .auth.client_token)
       mkdir ~/.aws
