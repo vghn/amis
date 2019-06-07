@@ -15,7 +15,7 @@ install:
     unzip -d ~/bin packer.zip
     packer version
   - git clone https://github.com/vghn/ansible ../ansible
-  - ansible-galaxy install --role-file requirements.yml
+  - ( cd ../ansible; ansible-galaxy install --role-file requirements.yml )
 before_script:
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
