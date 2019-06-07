@@ -1,5 +1,4 @@
 dist: xenial
-language: ruby
 env:
   global:
     PACKER_VERSION: '1.4.1'
@@ -7,17 +6,14 @@ env:
     - AMI=prometheus AWS_PROFILE=lyra
     - AMI=vault AWS_PROFILE=hydra
 install:
-  # Install PIP packages
   - |
     pip install --user --upgrade pip pycrypto ansible aws-amicleaner future
     ansible --version
     amicleaner --version
-  # Install Hashicorp's Packer
   - |
     curl -L -o packer.zip "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
     unzip -d ~/bin packer.zip
     packer version
-  # Add Ansible repository
   - git clone https://github.com/vghn/ansible ../ansible
   - ansible-galaxy install --role-file requirements.yml
 before_script:
