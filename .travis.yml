@@ -1,4 +1,5 @@
 dist: xenial
+language: python
 env:
   global:
     PACKER_VERSION: '1.4.1'
@@ -9,7 +10,7 @@ env:
     - AMI=vault AWS_PROFILE=hydra
 install:
   - |
-    pip install --user --upgrade pip pycrypto ansible aws-amicleaner future
+    pip install --upgrade pip ansible hvac pycrypto aws-amicleaner future
     ansible --version
     amicleaner --version
   - |
@@ -28,8 +29,7 @@ before_script:
       export VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=${VAULT_ROLE_ID} secret_id=${VAULT_SECRET_ID})"
       mkdir -p ~/.aws
       vault kv get -field=credentials secrets/aws > ~/.aws/credentials
-      #vault kv get -field=key secrets/ansible/rsa >../ansible/rsa
-      chmod 400 ~/.aws/credentials #../ansible/rsa
+      chmod 400 ~/.aws/credentials
     fi
 script:
   - packer validate "packer/${AMI}.json"
