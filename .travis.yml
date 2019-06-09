@@ -27,7 +27,7 @@ before_script:
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
       export VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=${VAULT_ROLE_ID} secret_id=${VAULT_SECRET_ID})"
       mkdir -p ~/.aws
-      vault kv get -field=aws_credentials secrets/aws > ~/.aws/credentials
+      vault kv get -field=credentials secrets/aws > ~/.aws/credentials
       #vault kv get -field=key secrets/ansible/rsa >../ansible/rsa
       chmod 400 ~/.aws/credentials #../ansible/rsa
     fi
