@@ -1,6 +1,6 @@
 {
   "variables": {
-    "vault_version": "1.2.0"
+    "vault_version": "1.2.1"
   },
   "builders": [
     {
