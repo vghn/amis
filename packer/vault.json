@@ -22,7 +22,6 @@
       },
       "instance_type": "c5.large",
       "spot_price": "auto",
-      "spot_price_auto_product": "Linux/UNIX (Amazon VPC)",
       "region": "us-east-1",
       "ssh_username": "ubuntu",
       "run_tags": {
