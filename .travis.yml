@@ -2,9 +2,9 @@ dist: xenial
 language: python
 env:
   global:
-    PACKER_VERSION: '1.4.1'
+    PACKER_VERSION: '1.4.3'
     VAULT_ADDR: 'https://vault.ghn.me:8200'
-    VAULT_VERSION: '1.2.1'
+    VAULT_VERSION: '1.2.2'
   matrix:
     - AMI=prometheus AWS_PROFILE=lyra
     - AMI=vault AWS_PROFILE=hydra
