@@ -21,7 +21,6 @@
         "most_recent": true
       },
       "instance_type": "c5.large",
-      "spot_price": "auto",
       "region": "us-east-1",
       "ssh_username": "ubuntu",
       "run_tags": {
