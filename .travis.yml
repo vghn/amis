@@ -2,7 +2,7 @@ dist: xenial
 language: python
 env:
   global:
-    PACKER_VERSION: '1.4.3'
+    PACKER_VERSION: '1.4.4'
     VAULT_ADDR: 'https://vault.ghn.me:8200'
     VAULT_VERSION: '1.2.3'
   matrix:
