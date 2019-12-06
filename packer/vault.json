@@ -61,7 +61,10 @@
     },{
       "type": "shell",
       "inline": [
-        "curl -sfL https://raw.githubusercontent.com/Neilpang/acme.sh/{{user `acme_installer_version`}}/acme.sh | bash"
+        "git clone https://github.com/Neilpang/acme.sh.git /tmp/acme.sh",
+        "cd /tmp/acme.sh",
+        "git checkout {{user `acme_installer_version`}}",
+        "sudo su -c './acme.sh --install'"
       ]
     }
   ]
