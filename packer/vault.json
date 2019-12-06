@@ -53,7 +53,7 @@
     },{
       "type": "shell",
       "inline": [
-        "curl -sfL https://raw.githubusercontent.com/hashicorp/terraform-aws-vault/{{user `vault_installer_version`}}/modules/install-vault/install-vault | sh -s - --version {{user `vault_version`}}"
+        "curl -sfL https://raw.githubusercontent.com/hashicorp/terraform-aws-vault/{{user `vault_installer_version`}}/modules/install-vault/install-vault | sh -s -- --version {{user `vault_version`}}"
       ]
     },{
       "type": "shell",
