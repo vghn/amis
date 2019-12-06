@@ -55,8 +55,8 @@
       "inline": [
         "git clone https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",
         "cd /tmp/terraform-aws-vault/modules/install-vault",
-        "git co {{user `vault_installer_version`}}"
-        "install-vault --version {{user `vault_version`}}"
+        "git co {{user `vault_installer_version`}}",
+        "install-vault --version {{user `vault_version`}}",
         "/tmp/terraform-aws-vault/modules/install-vault/install-vault --version {{user `vault_version`}}"
       ]
     },{
