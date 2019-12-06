@@ -53,18 +53,15 @@
     },{
       "type": "shell",
       "inline": [
-        "git clone https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",
-        "cd /tmp/terraform-aws-vault",
-        "git checkout {{user `vault_installer_version`}}",
-        "./modules/install-vault/install-vault --version {{user `vault_version`}}"
+        "git clone --single-branch --branch {{user `vault_installer_version`}} https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",
+        "cd /tmp/terraform-aws-vault/modules/install-vault && ./install-vault --version {{user `vault_version`}}"
       ]
     },{
       "type": "shell",
       "inline": [
-        "git clone https://github.com/Neilpang/acme.sh.git /tmp/acme.sh",
-        "cd /tmp/acme.sh",
-        "git checkout {{user `acme_installer_version`}}",
-        "sudo su -c './acme.sh --install'"
+        "apt-get -qy install socat",
+        "git clone --single-branch --branch {{user `acme_installer_version`}} https://github.com/Neilpang/acme.sh.git /tmp/acme.sh",
+        "cd /tmp/acme.sh && sudo su -c './acme.sh --install'"
       ]
     }
   ]
