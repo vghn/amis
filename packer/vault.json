@@ -8,7 +8,6 @@
     {
       "name": "Vault",
       "type": "amazon-ebs",
-      "profile": "hydra",
       "ami_name": "Vault_{{timestamp}}",
       "ami_description": "Vault AMI",
       "source_ami_filter": {
