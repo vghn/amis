@@ -1,6 +1,8 @@
 {
   "variables": {
-    "vault_version": "1.3.0"
+    "vault_version": "1.3.0",
+    "vault_installer_version": "master",
+    "acme_installer_version": "master"
   },
   "builders": [
     {
@@ -51,14 +53,12 @@
     },{
       "type": "shell",
       "inline": [
-        "git clone https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",
-        "/tmp/terraform-aws-vault/modules/install-vault/install-vault --version {{user `vault_version`}}"
+        "curl -sfL https://raw.githubusercontent.com/hashicorp/terraform-aws-vault/{{user `vault_installer_version`}}/modules/install-vault/install-vault | sh -s - --version {{user `vault_version`}}"
       ]
     },{
       "type": "shell",
       "inline": [
-        "git clone https://github.com/Neilpang/acme.sh.git /tmp/acme.sh",
-        "cd /tmp/acme.sh && sudo su -c './acme.sh --install'"
+        "curl -sfL https://raw.githubusercontent.com/Neilpang/acme.sh/{{user `acme_installer_version`}}/acme.sh | sh"
       ]
     }
   ]
