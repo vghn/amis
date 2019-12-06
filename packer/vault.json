@@ -58,10 +58,11 @@
       ]
     },{
       "type": "shell",
+      "execute_command": "{{ .Vars }} sudo -E bash -e '{{ .Path }}'",
       "inline": [
         "apt-get -qy install socat",
         "git clone --single-branch --branch {{user `acme_installer_version`}} https://github.com/Neilpang/acme.sh.git /tmp/acme.sh",
-        "cd /tmp/acme.sh && sudo su -c './acme.sh --install'"
+        "cd /tmp/acme.sh && ./acme.sh --install"
       ]
     }
   ]
