@@ -53,12 +53,12 @@
     },{
       "type": "shell",
       "inline": [
-        "curl -sfL https://raw.githubusercontent.com/hashicorp/terraform-aws-vault/{{user `vault_installer_version`}}/modules/install-vault/install-vault | sh /dev/stdin --version {{user `vault_version`}}"
+        "curl -sfL https://raw.githubusercontent.com/hashicorp/terraform-aws-vault/{{user `vault_installer_version`}}/modules/install-vault/install-vault | bash -s -- --version {{user `vault_version`}}"
       ]
     },{
       "type": "shell",
       "inline": [
-        "curl -sfL https://raw.githubusercontent.com/Neilpang/acme.sh/{{user `acme_installer_version`}}/acme.sh | sh"
+        "curl -sfL https://raw.githubusercontent.com/Neilpang/acme.sh/{{user `acme_installer_version`}}/acme.sh | bash"
       ]
     }
   ]
