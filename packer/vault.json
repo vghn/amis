@@ -51,6 +51,10 @@
         "apt-get update && apt-get -qy -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade && apt-get -y autoremove --purge"
       ]
     },{
+      "type": "ansible",
+      "playbook_file": "ansible/vault.yml",
+      "galaxy_file": "ansible/requirements.yml"
+    },{
       "type": "shell",
       "inline": [
         "git clone --single-branch --branch {{user `vault_installer_version`}} https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",

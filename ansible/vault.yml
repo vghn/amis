@@ -1,0 +1,22 @@
+---
+- name: Vault Playbook
+  hosts: all
+  become: yes
+  vars:
+    remote_logs_enabled: true
+    remote_logs_server: logs.ghn.me
+    swap_file_size_mb: '1024'
+    security_autoupdate_enabled: true
+    security_fail2ban_enabled: true
+  pre_tasks:
+    - name: Update all packages
+      package:
+        name: '*'
+        state: latest
+  roles:
+    - vladgh.common
+    - geerlingguy.swap
+    - dev-sec.os-hardening
+    - dev-sec.ssh-hardening
+    - geerlingguy.security
+    - cloudalchemy.node-exporter
