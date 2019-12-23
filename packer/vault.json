@@ -53,6 +53,11 @@
     },{
       "type": "ansible",
       "host_alias": "vault",
+      "groups": [
+        "vgh",
+        "aws",
+        "monitor"
+      ],
       "playbook_file": "../ansible/site.yml",
       "galaxy_file": "../ansible/requirements.yml",
       "inventory_directory": "../ansible",

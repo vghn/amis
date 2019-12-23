@@ -48,6 +48,13 @@
     },{
       "type": "ansible",
       "host_alias": "prometheus",
+      "groups": [
+        "vgh",
+        "aws",
+        "monitor",
+        "docker",
+        "nfs_clients"
+      ],
       "playbook_file": "../ansible/site.yml",
       "galaxy_file": "../ansible/requirements.yml",
       "inventory_directory": "../ansible",
