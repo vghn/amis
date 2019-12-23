@@ -27,11 +27,12 @@ before_script:
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
       # Vault AMI should use different AWS credentials (from the environment)
-      if [[ "$AMI" == 'vault' ]]; then return; fi
-      export VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=${VAULT_ROLE_ID} secret_id=${VAULT_SECRET_ID})"
-      mkdir -p ~/.aws
-      vault kv get -field="$AWS_PROFILE" vgh/terraform/aws > ~/.aws/credentials
-      chmod 400 ~/.aws/credentials
+      if [[ "$AMI" != 'vault' ]]; then
+        export VAULT_TOKEN="$(vault write -field=token auth/approle/login role_id=${VAULT_ROLE_ID} secret_id=${VAULT_SECRET_ID})"
+        mkdir -p ~/.aws
+        vault kv get -field="$AWS_PROFILE" vgh/terraform/aws > ~/.aws/credentials
+        chmod 400 ~/.aws/credentials
+      fi
     fi
 script:
   - packer validate "packer/${AMI}.json"
