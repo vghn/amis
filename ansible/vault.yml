@@ -8,11 +8,6 @@
     swap_file_size_mb: '1024'
     security_autoupdate_enabled: true
     security_fail2ban_enabled: true
-  pre_tasks:
-    - name: Update all packages
-      package:
-        name: '*'
-        state: latest
   roles:
     - vladgh.common
     - geerlingguy.swap
