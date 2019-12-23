@@ -23,7 +23,6 @@ install:
     unzip vault_${VAULT_VERSION}_linux_amd64.zip; mv vault ~/bin/
   - |
     git clone https://github.com/vghn/ansible ../ansible
-    ( cd ../ansible; ansible-galaxy install --role-file requirements.yml )
 before_script:
   - |
     if [[ "$TRAVIS_BRANCH" == master && "$TRAVIS_PULL_REQUEST" == false ]]; then
