@@ -49,13 +49,13 @@ jobs:
             echo ::add-mask::$VAULT_TOKEN
             echo ::set-env name=VAULT_TOKEN::$VAULT_TOKEN
       if: matrix.ami.name != 'vault'
-    - name: Get AWS credentials
+    - name: Get AWS credentials from Vault
       run: |
             mkdir -p ~/.aws
-            vault kv get -field="$AWS_PROFILE" vgh/terraform/aws > ~/.aws/credentials
+            vault kv get -field=${{ matrix.ami.profile }} vgh/terraform/aws > ~/.aws/credentials
             chmod 400 ~/.aws/credentials
       if: matrix.ami.name != 'vault'
-    - name: Get AWS credentials for Vault AMI
+    - name: Get AWS credentials for Vault
       run: |
             mkdir -p ~/.aws
             echo -n -e '[${{ matrix.ami.profile }}]\naws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}\naws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}' > ~/.aws/credentials
@@ -64,8 +64,8 @@ jobs:
     - name: Validate AMI
       run: packer validate packer/${{ matrix.ami.name }}.json
     - name: Build AMI
-      run: echo packer build packer/${{ matrix.ami.name }}.json
-    - name: Build AMI
-      run: echo amicleaner --mapping-key name --mapping-values "${AMI_NAME^}" --force-delete --full-report --keep-previous 1 --check-orphans
+      run: packer build packer/${{ matrix.ami.name }}.json
+    - name: Clean AMI
+      run: amicleaner --mapping-key name --mapping-values "${AMI_NAME^}" --force-delete --full-report --keep-previous 1 --check-orphans
       env:
-        AWS_NAME: ${{ matrix.ami.name }}
+        AMI_NAME: ${{ matrix.ami.name }}
