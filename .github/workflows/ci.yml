@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron:  '2 2 * * 0'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      PACKER_VERSION: '1.5.1'
+      VAULT_VERSION: '1.3.1'
+      VAULT_ADDR: 'https://vault.ghn.me:8200'
+      AWS_DEFAULT_REGION: 'us-east-1'
+      AWS_PROFILE: ${{ matrix.ami.profile }}
+    strategy:
+      matrix:
+        ami:
+          - name: vault
+            profile: hydra
+          - name: prometheus
+            profile: lyra
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v1
+    - name: Checkout Ansible repo
+      run: git clone https://github.com/vghn/ansible ../ansible
+    - name: Install dependencies
+      run: pip install --upgrade pip ansible hvac pycrypto aws-amicleaner
+    - name: Install Packer
+      run: |
+            wget -q "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
+            wget -qO - "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_SHA256SUMS" | grep linux_amd64 | sha256sum -c
+            sudo unzip -d /usr/local/bin/ "packer_${PACKER_VERSION}_linux_amd64.zip"
+            packer version
+    - name: Install Vault
+      run: |
+            wget -q "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip"
+            wget -qO - "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_SHA256SUMS" | grep linux_amd64 | sha256sum -c
+            sudo unzip -d /usr/local/bin/ "vault_${VAULT_VERSION}_linux_amd64.zip"
+            vault version
+    - name: Authenticate Vault
+      run: |
+            VAULT_TOKEN=$(vault write -field=token auth/approle/login role_id=${{ secrets.VAULT_ROLE_ID }} secret_id=${{ secrets.VAULT_SECRET_ID }})
+            echo ::add-mask::$VAULT_TOKEN
+            echo ::set-env name=VAULT_TOKEN::$VAULT_TOKEN
+      if: matrix.ami.name != 'vault'
+    - name: Get AWS credentials
+      run: |
+            mkdir -p ~/.aws
+            vault kv get -field="$AWS_PROFILE" vgh/terraform/aws > ~/.aws/credentials
+            chmod 400 ~/.aws/credentials
+      if: matrix.ami.name != 'vault'
+    - name: Get AWS credentials for Vault AMI
+      run: |
+            mkdir -p ~/.aws
+            echo -n -e '[${{ matrix.ami.profile }}]\naws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}\naws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}' > ~/.aws/credentials
+            chmod 400 ~/.aws/credentials
+      if: matrix.ami.name == 'vault'
+    - name: Validate AMI
+      run: packer validate packer/${{ matrix.ami.name }}.json
+    - name: Build AMI
+      run: echo packer build packer/${{ matrix.ami.name }}.json
+    - name: Build AMI
+      run: echo amicleaner --mapping-key name --mapping-values "${AMI_NAME^}" --force-delete --full-report --keep-previous 1 --check-orphans
+      env:
+        AWS_NAME: ${{ matrix.ami.name }}
