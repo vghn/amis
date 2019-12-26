@@ -1,6 +1,6 @@
 # VGH AMIs
 
-  [![Build Status](https://travis-ci.com/vghn/ami.svg?branch=master)](https://travis-ci.com/vghn/ami)
+![Build Status](https://github.com/vghn/amis/workflows/CI/badge.svg)
 
 ## Overview
 
