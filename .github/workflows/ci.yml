@@ -62,6 +62,8 @@ jobs:
             echo -n -e '[${{ matrix.ami.profile }}]\naws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}\naws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}' > ~/.aws/credentials
             chmod 400 ~/.aws/credentials
       if: matrix.ami.name == 'vault'
+    - name: Get Ansible Vault password
+      run: echo '${{ secrets.ANSIBLE_VAULT_PASSWORD }}' > ../ansible/vault_pwd
     - name: Validate AMI
       run: packer validate packer/${{ matrix.ami.name }}.json
     - name: Build AMI

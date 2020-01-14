@@ -51,8 +51,18 @@
       ]
     },{
       "type": "ansible",
-      "playbook_file": "ansible/vault_playbook.yml",
-      "galaxy_file": "ansible/vault_requirements.yml"
+      "host_alias": "vault",
+      "groups": [
+        "monitor"
+      ],
+      "playbook_file": "../ansible/site.yml",
+      "galaxy_file": "../ansible/requirements.yml",
+      "inventory_directory": "../ansible",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=../ansible/ansible.cfg",
+        "ANSIBLE_VAULT_PASSWORD_FILE=../ansible/vault_pwd",
+        "ANSIBLE_SSH_ARGS='-o ControlMaster=auto -o ControlPersist=10m'"
+      ]
     },{
       "type": "shell",
       "inline": [
