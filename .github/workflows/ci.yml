@@ -63,7 +63,9 @@ jobs:
             chmod 400 ~/.aws/credentials
       if: matrix.ami.name == 'vault'
     - name: Get Ansible Vault password
-      run: echo '${{ secrets.ANSIBLE_VAULT_PASSWORD }}' > ../ansible/vault_pwd
+      run: |
+            echo '${{ secrets.ANSIBLE_VAULT_PASSWORD }}' > ../ansible/vault_pwd
+            chmod 400 ../ansible/vault_pwd
     - name: Validate AMI
       run: packer validate packer/${{ matrix.ami.name }}.json
     - name: Build AMI

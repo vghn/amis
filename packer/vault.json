@@ -50,20 +50,6 @@
         "apt-get update && apt-get -qy -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade && apt-get -y autoremove --purge"
       ]
     },{
-      "type": "ansible",
-      "host_alias": "vault",
-      "groups": [
-        "monitor"
-      ],
-      "playbook_file": "../ansible/site.yml",
-      "galaxy_file": "../ansible/requirements.yml",
-      "inventory_directory": "../ansible",
-      "ansible_env_vars": [
-        "ANSIBLE_CONFIG=../ansible/ansible.cfg",
-        "ANSIBLE_VAULT_PASSWORD_FILE=../ansible/vault_pwd",
-        "ANSIBLE_SSH_ARGS='-o ControlMaster=auto -o ControlPersist=10m'"
-      ]
-    },{
       "type": "shell",
       "inline": [
         "git clone --single-branch --branch {{user `vault_installer_version`}} https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",
@@ -76,6 +62,20 @@
         "sudo -E apt-get -qy install socat",
         "git clone --single-branch --branch {{user `acme_installer_version`}} https://github.com/Neilpang/acme.sh.git /tmp/acme.sh",
         "cd /tmp/acme.sh && sudo su -c './acme.sh --install'"
+      ]
+    },{
+      "type": "ansible",
+      "host_alias": "vault",
+      "groups": [
+        "monitor"
+      ],
+      "inventory_directory": "../ansible",
+      "playbook_file": "../ansible/site.yml",
+      "galaxy_file": "../ansible/requirements.yml",
+      "ansible_env_vars": [
+        "ANSIBLE_CONFIG=../ansible/ansible.cfg",
+        "ANSIBLE_VAULT_PASSWORD_FILE=../ansible/vault_pwd",
+        "ANSIBLE_SSH_ARGS='-o ControlMaster=auto -o ControlPersist=10m'"
       ]
     }
   ]
