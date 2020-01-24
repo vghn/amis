@@ -49,8 +49,8 @@
       "host_alias": "prometheus",
       "groups": [
         "docker",
-        "monitor",
-        "nfs_clients"
+        "harden",
+        "monitor"
       ],
       "playbook_file": "../ansible/site.yml",
       "galaxy_file": "../ansible/requirements.yml",

@@ -67,6 +67,7 @@
       "type": "ansible",
       "host_alias": "vault",
       "groups": [
+        "harden",
         "monitor"
       ],
       "inventory_directory": "../ansible",
