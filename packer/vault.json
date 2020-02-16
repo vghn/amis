@@ -21,7 +21,7 @@
         "owners": ["099720109477"],
         "most_recent": true
       },
-      "instance_type": "c5.large",
+      "instance_type": "t3.micro",
       "region": "us-east-1",
       "ssh_username": "ubuntu",
       "run_tags": {
