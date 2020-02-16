@@ -59,7 +59,7 @@ jobs:
     - name: Get AWS credentials for Vault
       run: |
             mkdir -p ~/.aws
-            echo -n -e '[${{ matrix.ami.profile }}]\naws_access_key_id=${{ secrets.AWS_ACCESS_KEY_ID }}\naws_secret_access_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}' > ~/.aws/credentials
+            echo -n -e '[${{ matrix.ami.profile }}]\naws_access_key_id=${{ secrets.VAULT_AWS_ACCESS_KEY_ID }}\naws_secret_access_key=${{ secrets.VAULT_AWS_SECRET_ACCESS_KEY }}' > ~/.aws/credentials
             chmod 400 ~/.aws/credentials
       if: matrix.ami.name == 'vault'
     - name: Get Ansible Vault password
