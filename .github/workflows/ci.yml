@@ -21,9 +21,9 @@ jobs:
       matrix:
         ami:
           - name: vault
-            profile: hydra
+            profile: ara
           - name: prometheus
-            profile: lyra
+            profile: nyx
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
