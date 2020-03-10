@@ -50,20 +50,6 @@
         "apt-get update && apt-get -qy -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' dist-upgrade && apt-get -y autoremove --purge"
       ]
     },{
-      "type": "shell",
-      "inline": [
-        "git clone --single-branch --branch {{user `vault_installer_version`}} https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",
-        "cd /tmp/terraform-aws-vault/modules/install-vault && ./install-vault --version {{user `vault_version`}}"
-      ]
-    },{
-      "type": "shell",
-      "inline": [
-        "export DEBIAN_FRONTEND=noninteractive",
-        "sudo -E apt-get -qy install socat",
-        "git clone --single-branch --branch {{user `acme_installer_version`}} https://github.com/acmesh-official/acme.sh /tmp/acme.sh",
-        "cd /tmp/acme.sh && sudo su -c './acme.sh --install'"
-      ]
-    },{
       "type": "ansible",
       "host_alias": "vault",
       "groups": [
@@ -77,6 +63,20 @@
         "ANSIBLE_CONFIG=../ansible/ansible.cfg",
         "ANSIBLE_VAULT_PASSWORD_FILE=../ansible/vault_pwd",
         "ANSIBLE_SSH_ARGS='-o ControlMaster=auto -o ControlPersist=10m'"
+      ]
+    },{
+      "type": "shell",
+      "inline": [
+        "git clone --single-branch --branch {{user `vault_installer_version`}} https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",
+        "cd /tmp/terraform-aws-vault/modules/install-vault && ./install-vault --version {{user `vault_version`}}"
+      ]
+    },{
+      "type": "shell",
+      "inline": [
+        "export DEBIAN_FRONTEND=noninteractive",
+        "sudo -E apt-get -qy install socat",
+        "git clone --single-branch --branch {{user `acme_installer_version`}} https://github.com/acmesh-official/acme.sh /tmp/acme.sh",
+        "cd /tmp/acme.sh && sudo su -c './acme.sh --install'"
       ]
     }
   ]
