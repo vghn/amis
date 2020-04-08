@@ -11,8 +11,8 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     env:
-      PACKER_VERSION: '1.5.4'
-      VAULT_VERSION: '1.3.4'
+      PACKER_VERSION: '1.5.5'
+      VAULT_VERSION: '1.4.0'
       VAULT_ADDR: 'https://vault.ghn.me:8200'
       AWS_DEFAULT_REGION: 'us-east-1'
       AWS_PROFILE: ${{ matrix.ami.profile }}

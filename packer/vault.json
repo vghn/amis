@@ -1,6 +1,6 @@
 {
   "variables": {
-    "vault_version": "1.3.4",
+    "vault_version": "1.4.0",
     "vault_installer_version": "master",
     "acme_installer_version": "master"
   },
