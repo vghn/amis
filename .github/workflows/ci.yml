@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    name: Build AMI
+    name: Build
     runs-on: ubuntu-latest
     env:
       PACKER_VERSION: '1.5.5'
@@ -28,7 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
     - name: Checkout Ansible repo
       run: git clone https://github.com/vghn/ansible ../ansible
     - name: Install dependencies
