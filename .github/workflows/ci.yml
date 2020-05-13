@@ -8,11 +8,12 @@ on:
     - cron:  '2 2 * * 0'
 
 jobs:
-  Build:
+  build:
+    name: Build AMI
     runs-on: ubuntu-latest
     env:
       PACKER_VERSION: '1.5.5'
-      VAULT_VERSION: '1.4.0'
+      VAULT_VERSION: '1.4.1'
       VAULT_ADDR: 'https://vault.ghn.me:8200'
       AWS_DEFAULT_REGION: 'us-east-1'
       AWS_PROFILE: ${{ matrix.ami.profile }}
