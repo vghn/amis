@@ -4,11 +4,7 @@
 
 ## Overview
 
-Vlad's AWS AMIs
-
-## Contribute
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) file.
+Vlad's AMIs
 
 ## License
 

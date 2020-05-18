@@ -13,18 +13,17 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PACKER_VERSION: '1.5.6'
-      VAULT_VERSION: '1.4.1'
-      VAULT_ADDR: 'https://vault.ghn.me:8200'
-      AWS_DEFAULT_REGION: 'us-east-1'
-      AWS_PROFILE: ${{ matrix.ami.profile }}
+      AWS_DEFAULT_REGION: "${{ matrix.ami.region }}"
+      AWS_ACCESS_KEY_ID: "${{ matrix.ami.access_key_id }}"
+      AWS_SECRET_ACCESS_KEY: "${{ matrix.ami.secret_access_key }}"
     strategy:
       fail-fast: false
       matrix:
         ami:
-          - name: vault
-            profile: ara
           - name: prometheus
-            profile: nyx
+            region: 'us-east-1'
+            access_key_id: "${{ secrets.NYX_AWS_ACCESS_KEY_ID }}"
+            secret_access_key: "${{ secrets.NYX_AWS_SECRET_ACCESS_KEY }}"
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -39,31 +38,6 @@ jobs:
             wget -qO - "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_SHA256SUMS" | grep linux_amd64 | sha256sum -c
             sudo unzip -o -d /usr/local/bin/ "packer_${PACKER_VERSION}_linux_amd64.zip"
             packer version
-    - name: Install Vault
-      run: |
-            wget -q "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_linux_amd64.zip"
-            wget -qO - "https://releases.hashicorp.com/vault/${VAULT_VERSION}/vault_${VAULT_VERSION}_SHA256SUMS" | grep linux_amd64 | sha256sum -c
-            sudo unzip -o -d /usr/local/bin/ "vault_${VAULT_VERSION}_linux_amd64.zip"
-            vault version
-      if: matrix.ami.name != 'vault'
-    - name: Authenticate Vault
-      run: |
-            VAULT_TOKEN=$(vault write -field=token auth/approle/login role_id=${{ secrets.VAULT_ROLE_ID }} secret_id=${{ secrets.VAULT_SECRET_ID }})
-            echo ::add-mask::$VAULT_TOKEN
-            echo ::set-env name=VAULT_TOKEN::$VAULT_TOKEN
-      if: matrix.ami.name != 'vault'
-    - name: Get AWS credentials from Vault
-      run: |
-            mkdir -p ~/.aws
-            vault kv get -field=${{ matrix.ami.profile }} vgh/terraform/aws > ~/.aws/credentials
-            chmod 400 ~/.aws/credentials
-      if: matrix.ami.name != 'vault'
-    - name: Get AWS credentials for Vault
-      run: |
-            mkdir -p ~/.aws
-            echo -n -e '[${{ matrix.ami.profile }}]\naws_access_key_id=${{ secrets.VAULT_AWS_ACCESS_KEY_ID }}\naws_secret_access_key=${{ secrets.VAULT_AWS_SECRET_ACCESS_KEY }}' > ~/.aws/credentials
-            chmod 400 ~/.aws/credentials
-      if: matrix.ami.name == 'vault'
     - name: Get Ansible Vault password
       run: |
             echo '${{ secrets.ANSIBLE_VAULT_PASSWORD }}' > ../ansible/vault_pwd
