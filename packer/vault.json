@@ -58,7 +58,7 @@
         "export DEBIAN_FRONTEND=noninteractive",
         "sudo -E apt-get -qy install socat",
         "git clone --single-branch --branch {{user `acme_installer_version`}} https://github.com/acmesh-official/acme.sh /tmp/acme.sh",
-        "cd /tmp/acme.sh && sudo su -c './acme.sh --install'"
+        "cd /tmp/acme.sh && sudo su -c './acme.sh --install --config-home /data/acme'"
       ]
     }
   ]
