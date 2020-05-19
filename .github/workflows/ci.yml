@@ -29,6 +29,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Checkout Ansible repo
       run: git clone https://github.com/vghn/ansible ../ansible
+    - name: Set up Python
+      uses: actions/setup-python@v2
+    - name: Install dependencies
+      run: pip install --upgrade aws-amicleaner
     - name: Install Packer
       run: |
             wget -q "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
