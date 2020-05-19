@@ -16,6 +16,7 @@ jobs:
       AWS_DEFAULT_REGION: "${{ matrix.ami.region }}"
       AWS_ACCESS_KEY_ID: "${{ secrets[matrix.ami.access_key_id] }}"
       AWS_SECRET_ACCESS_KEY: "${{ secrets[matrix.ami.secret_access_key] }}"
+      AWS_AMI_NAME: ${{ matrix.ami.name }}
     strategy:
       fail-fast: false
       matrix:
@@ -26,12 +27,8 @@ jobs:
             secret_access_key: NYX_AWS_SECRET_ACCESS_KEY
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
     - name: Checkout Ansible repo
       run: git clone https://github.com/vghn/ansible ../ansible
-    - name: Install dependencies
-      run: pip install --upgrade pip ansible hvac pycrypto aws-amicleaner
     - name: Install Packer
       run: |
             wget -q "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_amd64.zip"
@@ -43,10 +40,8 @@ jobs:
             echo '${{ secrets.ANSIBLE_VAULT_PASSWORD }}' > ../ansible/vault_pwd
             chmod 400 ../ansible/vault_pwd
     - name: Validate AMI
-      run: packer validate packer/${{ matrix.ami.name }}.json
+      run: packer validate packer/"${AMI_NAME}".json
     - name: Build AMI
-      run: packer build packer/${{ matrix.ami.name }}.json
+      run: packer build packer/"${AMI_NAME}".json
     - name: Clean AMIs
       run: amicleaner --mapping-key name --mapping-values "${AMI_NAME^}" --force-delete --full-report --keep-previous 1 --check-orphans
-      env:
-        AMI_NAME: ${{ matrix.ami.name }}
