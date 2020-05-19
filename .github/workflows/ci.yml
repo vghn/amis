@@ -14,16 +14,16 @@ jobs:
     env:
       PACKER_VERSION: '1.5.6'
       AWS_DEFAULT_REGION: "${{ matrix.ami.region }}"
-      AWS_ACCESS_KEY_ID: "${{ matrix.ami.access_key_id }}"
-      AWS_SECRET_ACCESS_KEY: "${{ matrix.ami.secret_access_key }}"
+      AWS_ACCESS_KEY_ID: "${{ secrets[matrix.ami.access_key_id] }}"
+      AWS_SECRET_ACCESS_KEY: "${{ secrets[matrix.ami.secret_access_key] }}"
     strategy:
       fail-fast: false
       matrix:
         ami:
           - name: prometheus
-            region: 'us-east-1'
-            access_key_id: "${{ secrets.NYX_AWS_ACCESS_KEY_ID }}"
-            secret_access_key: "${{ secrets.NYX_AWS_SECRET_ACCESS_KEY }}"
+            region: us-east-1
+            access_key_id: NYX_AWS_ACCESS_KEY_ID
+            secret_access_key: NYX_AWS_SECRET_ACCESS_KEY
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python
@@ -46,7 +46,7 @@ jobs:
       run: packer validate packer/${{ matrix.ami.name }}.json
     - name: Build AMI
       run: packer build packer/${{ matrix.ami.name }}.json
-    - name: Clean AMI
+    - name: Clean AMIs
       run: amicleaner --mapping-key name --mapping-values "${AMI_NAME^}" --force-delete --full-report --keep-previous 1 --check-orphans
       env:
         AMI_NAME: ${{ matrix.ami.name }}
