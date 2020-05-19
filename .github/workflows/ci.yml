@@ -40,8 +40,8 @@ jobs:
             echo '${{ secrets.ANSIBLE_VAULT_PASSWORD }}' > ../ansible/vault_pwd
             chmod 400 ../ansible/vault_pwd
     - name: Validate AMI
-      run: packer validate packer/"${AMI_NAME}".json
+      run: packer validate packer/"${AWS_AMI_NAME}".json
     - name: Build AMI
-      run: packer build packer/"${AMI_NAME}".json
+      run: packer build packer/"${AWS_AMI_NAME}".json
     - name: Clean AMIs
-      run: amicleaner --mapping-key name --mapping-values "${AMI_NAME^}" --force-delete --full-report --keep-previous 1 --check-orphans
+      run: amicleaner --mapping-key name --mapping-values "${AWS_AMI_NAME^}" --force-delete --full-report --keep-previous 1 --check-orphans
