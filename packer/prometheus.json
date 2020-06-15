@@ -1,6 +1,6 @@
 {
   "variables": {
-    "ami_version": "2020-05-18"
+    "ami_version": "2020-06-14"
   },
   "builders": [
     {
