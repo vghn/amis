@@ -12,10 +12,11 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      PACKER_VERSION: '1.5.6'
+      PACKER_VERSION: '1.6.0'
       AWS_DEFAULT_REGION: "${{ matrix.ami.region }}"
       AWS_ACCESS_KEY_ID: "${{ secrets[matrix.ami.access_key_id] }}"
       AWS_SECRET_ACCESS_KEY: "${{ secrets[matrix.ami.secret_access_key] }}"
+      ANSIBLE_VAULT_PASSWORD: "${{ secrets.ANSIBLE_VAULT_PASSWORD }}"
       AWS_AMI_NAME: ${{ matrix.ami.name }}
     strategy:
       fail-fast: false
@@ -25,10 +26,13 @@ jobs:
             region: us-east-1
             access_key_id: NYX_AWS_ACCESS_KEY_ID
             secret_access_key: NYX_AWS_SECRET_ACCESS_KEY
+          - name: vault
+            region: us-east-1
+            access_key_id: ARA_AWS_ACCESS_KEY_ID
+            secret_access_key: ARA_AWS_SECRET_ACCESS_KEY
     steps:
-    - uses: actions/checkout@v2
-    - name: Checkout Ansible repo
-      run: git clone https://github.com/vghn/ansible ../ansible
+    - name: Checkout repos
+      uses: actions/checkout@v2
     - name: Set up Python
       uses: actions/setup-python@v2
     - name: Install dependencies
@@ -39,9 +43,14 @@ jobs:
             wget -qO - "https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_SHA256SUMS" | grep linux_amd64 | sha256sum -c
             sudo unzip -o -d /usr/local/bin/ "packer_${PACKER_VERSION}_linux_amd64.zip"
             packer version
+    - name: Checkout Ansible repo
+      uses: actions/checkout@v2
+      with:
+        repository: 'vghn/ansible'
+        path: '../ansible'
     - name: Get Ansible Vault password
       run: |
-            echo '${{ secrets.ANSIBLE_VAULT_PASSWORD }}' > ../ansible/vault_pwd
+            echo '${{ ANSIBLE_VAULT_PASSWORD }}' > ../ansible/vault_pwd
             chmod 400 ../ansible/vault_pwd
     - name: Validate AMI
       run: packer validate packer/"${AWS_AMI_NAME}".json

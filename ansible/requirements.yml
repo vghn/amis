@@ -1,0 +1,5 @@
+---
+- src: dev-sec.os-hardening
+- src: dev-sec.ssh-hardening
+- src: geerlingguy.security
+- src: vladgh.common

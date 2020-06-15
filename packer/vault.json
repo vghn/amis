@@ -1,0 +1,66 @@
+{
+  "variables": {
+    "ami_version": "2020-06-14",
+    "vault_version": "1.4.2",
+    "vault_installer_version": "master",
+    "acme_installer_version": "master"
+  },
+  "builders": [
+    {
+      "name": "Vault",
+      "type": "amazon-ebs",
+      "ami_name": "Vault_{{timestamp}}",
+      "ami_description": "Vault AMI",
+      "source_ami_filter": {
+        "filters": {
+          "architecture": "x86_64",
+          "root-device-type": "ebs",
+          "virtualization-type": "hvm",
+          "block-device-mapping.volume-type": "gp2",
+          "name": "ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"
+        },
+        "owners": ["099720109477"],
+        "most_recent": true
+      },
+      "instance_type": "t3.micro",
+      "region": "us-east-1",
+      "ssh_username": "ubuntu",
+      "run_tags": {
+        "Name": "Vault AMI",
+        "Group": "vgh",
+        "Project": "vgh",
+        "Packer": "true"
+      },
+      "tags": {
+        "Name": "Vault AMI",
+        "Group": "vgh",
+        "Project": "vgh",
+        "Packer": "true"
+      }
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": "while [ ! -f /var/lib/cloud/instance/boot-finished ]; do echo 'Waiting for cloud-init...'; sleep 5; done"
+    },{
+      "type": "ansible",
+      "playbook_file": "./ansible/playbook.yml",
+      "galaxy_file": "./ansible/requirements.yml"
+    },{
+      "type": "shell",
+      "inline": [
+        "git clone --single-branch --branch {{user `vault_installer_version`}} https://github.com/hashicorp/terraform-aws-vault.git /tmp/terraform-aws-vault",
+        "cd /tmp/terraform-aws-vault/modules/install-vault && ./install-vault --version {{user `vault_version`}}"
+      ]
+    },{
+      "type": "shell",
+      "inline": [
+        "export DEBIAN_FRONTEND=noninteractive",
+        "sudo -E apt-get -qy install socat",
+        "git clone --single-branch --branch {{user `acme_installer_version`}} https://github.com/acmesh-official/acme.sh /tmp/acme.sh",
+        "cd /tmp/acme.sh && sudo su -c './acme.sh --install --config-home /data/acme'"
+      ]
+    }
+  ]
+}
