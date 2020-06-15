@@ -16,7 +16,6 @@ jobs:
       AWS_DEFAULT_REGION: "${{ matrix.ami.region }}"
       AWS_ACCESS_KEY_ID: "${{ secrets[matrix.ami.access_key_id] }}"
       AWS_SECRET_ACCESS_KEY: "${{ secrets[matrix.ami.secret_access_key] }}"
-      ANSIBLE_VAULT_PASSWORD: "${{ secrets.ANSIBLE_VAULT_PASSWORD }}"
       AWS_AMI_NAME: ${{ matrix.ami.name }}
     strategy:
       fail-fast: false
@@ -50,7 +49,7 @@ jobs:
         path: 'ansible'
     - name: Get Ansible Vault password
       run: |
-            echo '${ANSIBLE_VAULT_PASSWORD}' > ansible/vault_pwd
+            echo '${{ secrets.ANSIBLE_VAULT_PASSWORD }}' > ansible/vault_pwd
             chmod 400 ansible/vault_pwd
     - name: Validate AMI
       run: packer validate packer/"${AWS_AMI_NAME}".json
