@@ -57,12 +57,12 @@
         "slack",
         "virtual"
       ],
-      "playbook_file": "./ansible/site.yml",
-      "galaxy_file": "./ansible/requirements.yml",
-      "inventory_directory": "./ansible",
+      "playbook_file": "ansible/site.yml",
+      "galaxy_file": "ansible/requirements.yml",
+      "inventory_directory": "ansible",
       "ansible_env_vars": [
-        "ANSIBLE_CONFIG=./ansible/ansible.cfg",
-        "ANSIBLE_VAULT_PASSWORD_FILE=./ansible/vault_pwd",
+        "ANSIBLE_CONFIG=ansible/ansible.cfg",
+        "ANSIBLE_VAULT_PASSWORD_FILE=ansible/vault_pwd",
         "ANSIBLE_SSH_ARGS='-o ControlMaster=auto -o ControlPersist=10m'"
       ]
     }
