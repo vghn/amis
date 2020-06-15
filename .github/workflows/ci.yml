@@ -47,11 +47,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: 'vghn/ansible'
-        path: '../ansible'
+        path: './ansible'
     - name: Get Ansible Vault password
       run: |
-            echo '${ANSIBLE_VAULT_PASSWORD}' > ../ansible/vault_pwd
-            chmod 400 ../ansible/vault_pwd
+            echo '${ANSIBLE_VAULT_PASSWORD}' > ./ansible/vault_pwd
+            chmod 400 ./ansible/vault_pwd
     - name: Validate AMI
       run: packer validate packer/"${AWS_AMI_NAME}".json
     - name: Build AMI
